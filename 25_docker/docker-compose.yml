@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  postgress:
+    image: postgres
+    container_name: 'baranov-docker-database'
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=1Passw0rd'
+      - 'POSTGRES_DB=solutions'
+#    volumes:
+#      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+#      - postgres_data:/var/lib/postgresql/data/
+  app:
+    build: .
+    container_name: 'baranov-docker-application'
+    ports:
+       - "8082:8082"
+    depends_on:
+      - postgress
+
+#volumes:
+#  postgres_data:

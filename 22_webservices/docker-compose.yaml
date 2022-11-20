@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  data_base:
+    image: postgres
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=1Passw0rd'
+      - 'POSTGRES_DB=solutions'
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data/
+
+  test:
+    build:
+      context: .
+      dockerfile: 22_webservices_test/Dockerfile
+#    depends_on:
+#      servlet:
+#        condition: service_healthy
+
+  servlet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+#    healthcheck:
+#      test: curl --fail -s http://localhost:8080/ || exit 1
+#      interval: 5s
+#      timeout: 10s
+#      retries: 3
+
+volumes:
+  postgres_data:
